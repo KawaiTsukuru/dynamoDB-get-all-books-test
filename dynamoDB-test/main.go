@@ -33,14 +33,17 @@ var (
 )
 
 func dataFromDynamoDB() ([]Book, error) {
+	fmt.Printf("DynamoDBから全ての書籍データを取得します。")
 	sess, _ := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1")},
+		Region: aws.String("ap-northeast-1")},
 	)
+	fmt.Println("DynamoDBとの接続に成功しました。")
 
 	svc := dynamodb.New(sess)
 
 	tableName := "books-table"
 
+	fmt.Println("DynamoDBから全ての書籍データを取得します。")
 	result, err := svc.Scan(&dynamodb.ScanInput{
 		TableName: aws.String(tableName),
 	})
@@ -48,6 +51,7 @@ func dataFromDynamoDB() ([]Book, error) {
 		fmt.Println(err.Error())
 		return nil, err 
 	}
+	fmt.Println("DynamoDBから全ての書籍データを取得しました。")
 
 	books := []Book{}
 
@@ -86,7 +90,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	}
 
 	// DynamoDBと接続するときはコメントアウトを外す
-	// books, _ := dataFromDynamoDB()
+	//books, _ := dataFromDynamoDB()
 
 	// DynamoDBのテーブルを作成するまでのダミーデータ
 	books := []Book{
