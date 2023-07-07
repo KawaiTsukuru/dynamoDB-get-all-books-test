@@ -13,11 +13,11 @@ Globals:
   Api:
     TracingEnabled: true
 Resources:
-  DynamoDBTestFunction:
+  GetAllBooksFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: DynamoDBTestFunction
-      Handler: dynamoDB-test
+      CodeUri: GetAllBooksFunction
+      Handler: getAllBooks
       Runtime: go1.x
       Architectures:
       - x86_64
@@ -46,7 +46,7 @@ Resources:
         StreamSpecification:
           StreamViewType: NEW_IMAGE
     Metadata:
-      SamResourceId: DynamoDBTestFunction
+      SamResourceId: GetAllBooksFunction
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
