@@ -1,23 +1,23 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
-	"encoding/json"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
-    "github.com/aws/aws-sdk-go/aws/session"
-    "github.com/aws/aws-sdk-go/service/dynamodb"
-    "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
 type Book struct {
-	ID string `json:"id"`
-	Title string `json:"title"`
+	ID     string `json:"id"`
+	Title  string `json:"title"`
 	Author string `json:"author"`
 }
 
@@ -49,7 +49,7 @@ func dataFromDynamoDB() ([]Book, error) {
 	})
 	if err != nil {
 		fmt.Println(err.Error())
-		return nil, err 
+		return nil, err
 	}
 	fmt.Println("DynamoDBから全ての書籍データを取得しました。")
 
@@ -67,7 +67,7 @@ func dataFromDynamoDB() ([]Book, error) {
 	}
 
 	fmt.Println("DynamoDBから全ての書籍データが正常に取得できました。")
-	return books, nil 
+	return books, nil
 }
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -90,20 +90,20 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	}
 
 	// DynamoDBと接続するときはコメントアウトを外す
-	//books, _ := dataFromDynamoDB()
+	books, _ := dataFromDynamoDB()
 
-	// DynamoDBのテーブルを作成するまでのダミーデータ
-	books := []Book{
-		Book{ID: "1", Title: "Book1", Author: "Author1"},
-		Book{ID: "2", Title: "Book2", Author: "Author2"},
-		Book{ID: "3", Title: "Book3", Author: "Author3"},
-	}
+	// // DynamoDBのテーブルを作成するまでのダミーデータ
+	// books := []Book{
+	// 	Book{ID: "1", Title: "Book1", Author: "Author1"},
+	// 	Book{ID: "2", Title: "Book2", Author: "Author2"},
+	// 	Book{ID: "3", Title: "Book3", Author: "Author3"},
+	// }
 
 	bytes, err := json.Marshal(books)
-	if (err != nil) {
+	if err != nil {
 		fmt.Println(err.Error())
 	}
-	
+
 	return events.APIGatewayProxyResponse{
 		Body:       string(bytes),
 		StatusCode: 200,
