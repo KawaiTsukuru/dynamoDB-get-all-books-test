@@ -34,8 +34,26 @@ Resources:
                     PARAM1: VALUE
             Policies:
                 - DynamoDBCrudPolicy:
-                    TableName: kawai-dynamoDB-books-test
-                    
+                      TableName: kawai-dynamoDB-books-test
+
+    AddBookFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: addBook/
+            Handler: addBook
+            Runtime: go1.x
+            Architectures:
+                - x86_64
+            Policies:
+                - DynamoDBCrudPolicy:
+                      TableName: kawai-dynamoDB-books-test
+            Events:
+                AddBookApi:
+                    Type: Api
+                    Properties:
+                        Path: /add-book
+                        Method: POST
+
         DynamoDBTable:
             Type: AWS::DynamoDB::Table
             Properties:
