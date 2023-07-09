@@ -32,18 +32,22 @@ Resources:
             Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
                 Variables:
                     PARAM1: VALUE
+            Policies:
+                - DynamoDBCrudPolicy:
+                    TableName: kawai-dynamoDB-books-test
                     
         DynamoDBTable:
             Type: AWS::DynamoDB::Table
             Properties:
-                TableName: kawai-dynamoDB-books-test
-                AttributeDefinitions:
+                TableName: dynamoDB-books-test
+                AttributeDefinitions: # テーブルの属性定義
                     - AttributeName: id
                       AttributeType: S
-                KeySchema:
+                KeySchema: # プライマリーキーの設定
                     - AttributeName: id
                       KeyType: HASH
                 ProvisionedThroughput:
+                    # 1 capasity unit : 1秒間に1KBの読み込みまたは書き込み
                     ReadCapacityUnits: 5
                     WriteCapacityUnits: 5
                 StreamSpecification:
